@@ -1,0 +1,26 @@
+﻿@model ICollection<VisitorRegistration_Models.Registration>
+
+@{
+    ViewData["Title"] = "Delete registrations";
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>@ViewData["Title"]</h2>
+    <hr />
+    <h5>Are you sure you want to delete @Model.Count visitor registrations?</h5>
+
+    <form method="post" asp-action="DeleteMultiple">
+        <input type="hidden" name="confirmed" value="true" />
+        @foreach (var item in Model)
+        {
+            <input type="hidden" name="checkedIds" value="@item.Id" />
+        }
+        <div class="form-group">
+            <button type="submit" class="btn btn-danger">Yes, delete</button>
+        </div>
+    </form>
+    <div>
+        <a href="@ViewData["ReturnUrl"]">Cancel</a>
+    </div>
+</div>

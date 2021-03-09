@@ -1,0 +1,46 @@
+﻿@model PaginationViewModel
+
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
+
+
+<div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
+    <div class="btn-group" role="group" aria-label="First group">
+        @Html.PagedListPager(Model.List, Model.GeneratePageUrl,
+            new PagedListRenderOptions
+            {
+                UlElementClasses = new string[] { "pagination", "m-0" },
+                LiElementClasses = new string[] { "page-item" },
+                PageClasses = new string[] { "page-link" },
+                LinkToFirstPageFormat = @"<i aria-hidden=""true"" class=""bi-chevron-double-left""></i><span class=""sr-only"">First</span>",
+                LinkToLastPageFormat = @"<i aria-hidden=""true"" class=""bi-chevron-double-right""></i><span class=""sr-only"">Last</span>",
+                LinkToPreviousPageFormat = @"<i aria-hidden=""true"" class=""bi-chevron-left""></i><span class=""sr-only"">Previous</span>",
+                LinkToNextPageFormat = @"<i aria-hidden=""true"" class=""bi-chevron-right""></i><span class=""sr-only"">Next</span>"
+            }
+        )
+    </div>
+    <div class="input-group">
+        <form method="get" class="form-inline">
+            @foreach (var item in Context.Request.Query)
+            {
+                if (item.Key == "pageSize") continue;
+                <input type="hidden" name="@item.Key" value="@item.Value" />
+            }
+            <label>
+                Show:
+                <select asp-for="@ViewData["PageSize"]" name="pageSize" onchange="this.form.submit()" class="form-control ml-2">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>5</option>
+                    <option>10</option>
+                    <option>25</option>
+                    <option>50</option>
+                    <option>100</option>
+                    <option value="-1">All</option>
+                </select>
+            </label>
+            <button type="submit" class="btn btn-secondary noscript-visible">Go</button>
+        </form>
+    </div>
+</div>

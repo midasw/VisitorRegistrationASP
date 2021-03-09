@@ -1,0 +1,51 @@
+﻿@model string
+
+@if (!String.IsNullOrEmpty(Model))
+{
+    var statusMessageClass = Model.StartsWith("Error") ? "danger" : "success";
+
+    <div class="alert alert-@statusMessageClass alert-dismissible" role="alert">
+        <button type="button" title="Dismiss" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        
+        @Model
+        <small class="text-muted">- <em id="js-time-elapsed"></em></small>
+
+        <script>
+            function timeSince(timeStamp) {
+                var now = new Date(),
+                    secondsPast = (now.getTime() - timeStamp) / 1000;
+                if (secondsPast < 1) {
+                    return 'just now';
+                }
+                if (secondsPast < 60) {
+                    return parseInt(secondsPast) + 's';
+                }
+                if (secondsPast < 3600) {
+                    return parseInt(secondsPast / 60) + 'm';
+                }
+                if (secondsPast <= 86400) {
+                    return parseInt(secondsPast / 3600) + 'h';
+                }
+                if (secondsPast > 86400) {
+                    day = timeStamp.getDate();
+                    month = timeStamp.toDateString().match(/ [a-zA-Z]*/)[0].replace(" ", "");
+                    year = timeStamp.getFullYear() == now.getFullYear() ? "" : " " + timeStamp.getFullYear();
+                    return day + " " + month + year;
+                }
+            }
+
+            var beginTime = new Date();
+
+            (function updateTimeElapsed() {
+
+                var el = document.getElementById("js-time-elapsed");
+
+                if (el == null) return;
+
+                el.innerHTML = timeSince(beginTime);
+
+                setTimeout(updateTimeElapsed, 15000);
+            })();
+        </script>
+    </div>
+}

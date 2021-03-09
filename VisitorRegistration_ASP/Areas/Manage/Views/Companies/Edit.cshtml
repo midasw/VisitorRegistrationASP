@@ -1,0 +1,31 @@
+﻿@model VisitorRegistration_Models.Company
+
+@{
+    ViewData["Title"] = "Edit company";
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>@ViewData["Title"]</h2>
+    <h4 id="subjectHeading">@Model.Name</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-9">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" onkeyup="$('#subjectHeading').text(this.value)" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <div>
+        <a href="@ViewData["ReturnUrl"]">Cancel</a>
+    </div>
+</div>

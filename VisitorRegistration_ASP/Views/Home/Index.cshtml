@@ -1,0 +1,100 @@
+﻿@model VisitorRegistration_ASP.Models.CheckInViewModel
+
+@*@using Microsoft.Extensions.Options;
+@inject IOptions<AppSettings> AppSettingsAccessor*@
+
+@inject IAppSettings AppSettings;
+
+@{
+    ViewData["Title"] = "Check in";
+
+    //var AppSettings = AppSettingsAccessor.Value;
+}
+
+<div class="container">
+    <h2>@ViewData["Title"]</h2>
+
+    <partial name="_StatusMessage" model="@(ViewData["StatusMessage"] ?? TempData["StatusMessage"])" />
+
+    <div class="row">
+        <div class="col-6">
+            <form method="post">
+                <div class="row">
+                    <div class="form-group col">
+                        <label asp-for="FirstName"></label>
+                        <input asp-for="FirstName" class="form-control" placeholder="John" autofocus />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col">
+                        <label asp-for="LastName"></label>
+                        <input asp-for="LastName" class="form-control" placeholder="Doe" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" class="form-control" placeholder="someone@example.com" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CompanyId">Select the company which you have an appointment with:</label>
+                    <select asp-for="CompanyId" asp-items="@Model.Companies" class="form-control" id="js-companies-dropdown">
+                        <option disabled selected>- Please select -</option>
+                    </select>
+                    <span asp-validation-for="CompanyId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="EmployeeId">Select the employee who you have an appointment with:</label>
+                    <select asp-for="EmployeeId" asp-items="@Model.Employees" class="form-control" id="js-employees-dropdown" disabled>
+                        <option disabled selected>- Please select -</option>
+                    </select>
+                    <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary">Check in</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(function () {
+
+            $('.input-validation-error').first().focus();
+
+            var $dropdown = $("#js-companies-dropdown");
+
+            if ($dropdown.val()) {
+                $("#js-employees-dropdown").prop("disabled", false);
+            }
+
+            $dropdown.on("change", function () {
+
+                var companyId = $(this).val();
+
+                var basePath = "@AppSettings.BaseApiPath";
+
+                $.ajax({
+                    url: basePath + "Employee/" + companyId,
+                    type: 'GET',
+                    dataType: "json",
+                    complete: function (response) {
+                        if (response.status == 200) {
+                            var employees = response.responseJSON;
+
+                            var s = '<option disabled selected>- Please select -</option>';
+
+                            $.each(employees, function (_i, employee) {
+                                s += '<option value="' + employee.id + '">' + employee.fullName + '</option>';
+                            });
+
+                            $("#js-employees-dropdown").html(s).prop("disabled", false);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

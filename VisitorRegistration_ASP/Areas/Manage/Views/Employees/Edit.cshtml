@@ -1,0 +1,36 @@
+﻿@model VisitorRegistration_Models.Employee
+
+@{
+    ViewData["Title"] = "Edit employee";
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>@ViewData["Title"]</h2>
+    <h4 id="subjectHeading">@Model.FullName</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-9">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group">
+                    <label asp-for="FirstName" class="control-label"></label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LastName" class="control-label"></label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <div>
+        <a asp-controller="Companies" asp-action="View" asp-route-id="@Model.Company.Id">Cancel</a>
+    </div>
+</div>

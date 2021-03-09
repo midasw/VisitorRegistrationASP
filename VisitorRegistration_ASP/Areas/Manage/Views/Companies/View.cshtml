@@ -1,0 +1,48 @@
+﻿@model VisitorRegistration_Models.Company
+
+@{
+    ViewData["Title"] = "View company";
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>@ViewData["Title"]</h2>
+    <h4 id="subjectHeading">@Model.Name</h4>
+    <partial name="_StatusMessage" model="@TempData["StatusMessage"]" />
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+    <h4>Employees</h4>
+    @{
+        if (Model.Employees != null)
+        {
+            <table class="col-6">
+                <tbody>
+                    @foreach (var item in Model.Employees)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FullName)
+                            </td>
+                            <td class="text-right">
+                                <a asp-controller="Employees" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                <a asp-controller="Employees" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    }
+    <p>
+        <a asp-controller="Employees" asp-action="Create" asp-route-companyId="@Model.Id" class="btn btn-primary">
+            Add employee
+        </a>
+    </p>
+</div>

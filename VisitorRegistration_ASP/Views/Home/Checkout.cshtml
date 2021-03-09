@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Check out";
+}
+
+<div class="container">
+    <h2>@ViewData["Title"]</h2>
+
+    <partial name="_StatusMessage" model="@(ViewData["StatusMessage"] ?? ViewData["ErrorMessage"] ?? TempData["StatusMessage"])" />
+
+    <div class="row">
+        <div class="col-6">
+            <form method="post">
+                <div class="form-group">
+                    <label class="control-label">Enter your email address:</label>
+                    <input type="email" name="Email" class="form-control" placeholder="someone@example.com" autofocus />
+                    <span class="text-danger">@Html.ValidationMessage("Email")</span>
+                </div>
+                <button type="submit" class="btn btn-primary">Check out</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,14 +1,10 @@
 ﻿@model VisitorRegistration_ASP.Models.CheckInViewModel
 
-@*@using Microsoft.Extensions.Options;
-@inject IOptions<AppSettings> AppSettingsAccessor*@
-
-@inject IAppSettings AppSettings;
+@using VisitorRegistration_ASP.Options;
+@inject WebApiOptions WebApiOptions;
 
 @{
     ViewData["Title"] = "Check in";
-
-    //var AppSettings = AppSettingsAccessor.Value;
 }
 
 <div class="container">
@@ -74,7 +70,7 @@
 
                 var companyId = $(this).val();
 
-                var basePath = "@AppSettings.BaseApiPath";
+                var basePath = "@WebApiOptions.BasePath";
 
                 $.ajax({
                     url: basePath + "Employee/" + companyId,

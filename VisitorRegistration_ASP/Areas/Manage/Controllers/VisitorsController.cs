@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using VisitorRegistration_ASP.Controllers;
 using VisitorRegistration_ASP.Helpers;
 using VisitorRegistration_BLL.Services;
+using VisitorRegistration_ASP.Options;
 using VisitorRegistration_Models;
 using X.PagedList;
 
@@ -17,13 +18,13 @@ namespace VisitorRegistration_ASP.Areas.Manage.Controllers
 
     public class VisitorsController : BaseController
     {
-        private readonly IAppSettings _appSettings;
         private readonly IVisitorRegistrationService _registrationService;
+        private readonly UserOptions _userOptions;
 
-        public VisitorsController(IAppSettings appSettings, IVisitorRegistrationService registrationService)
+        public VisitorsController(IVisitorRegistrationService registrationService, UserOptions userOptions)
         {
-            _appSettings = appSettings;
             _registrationService = registrationService;
+            _userOptions = userOptions;
         }
 
         private BreadcrumbNode BuildRootBreadcrumbNode()
@@ -45,11 +46,11 @@ namespace VisitorRegistration_ASP.Areas.Manage.Controllers
         [Breadcrumb("Visitors", AreaName = "Manage", FromAction = "Index", FromController = typeof(HomeController))]
         public async Task<IActionResult> Index(string q, int page = 1, int? pageSize = null)
         {
-            int size = pageSize ?? _appSettings.PageSize;
+            int size = pageSize ?? _userOptions.PageSize;
 
             if (pageSize != null)
             {
-                _appSettings.PageSize = size;
+                _userOptions.PageSize = size;
             }
 
             IPagedList<Registration> registrations;

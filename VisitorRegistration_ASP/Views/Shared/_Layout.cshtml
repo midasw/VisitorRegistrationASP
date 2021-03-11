@@ -4,17 +4,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Visitor App</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/lib/bootstrap-icons-1.4.0/bootstrap-icons.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
+    @*<link rel="stylesheet" href="~/lib/bootstrap-icons-1.4.0/bootstrap-icons.css" />*@
+    <environment names="Development"><link rel="stylesheet" href="~/css/vendor.css" /></environment>
+    <environment names="Staging,Production"><link rel="stylesheet" href="~/css/vendor.min.css" /></environment>
     <noscript>
         <link rel="stylesheet" href="~/css/noscript.css" />
     </noscript>
     @RenderSection("Styles", false)
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <header class="pb-2">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom shadow-sm mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Visitor App</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -29,15 +30,6 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Checkout">Check out</a>
                         </li>
-                        @*<li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="manageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Manage
-            </a>
-            <div class="dropdown-menu" aria-labelledby="manageDropdown">
-                <a class="dropdown-item" asp-area="Manage" asp-controller="Companies" asp-action="Index">Companies</a>
-                <a class="dropdown-item" asp-area="Manage" asp-controller="Visitors" asp-action="Index">Visitors</a>
-            </div>
-        </li>*@
                         <li class="nav-item dropdown">
                             <div class="btn-group">
                                 <a class="nav-link text-dark" asp-area="Manage" asp-controller="Home" asp-action="Index">Manage</a>

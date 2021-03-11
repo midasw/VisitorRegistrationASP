@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using VisitorRegistration_ASP.Options;
 using VisitorRegistration_BLL.Services;
 using VisitorRegistration_DAL;
 using VisitorRegistration_DAL.UnitOfWork;
@@ -29,7 +31,6 @@ namespace VisitorRegistration_ASP
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
@@ -39,12 +40,14 @@ namespace VisitorRegistration_ASP
 
             services.AddHttpContextAccessor();
 
-            services.AddSingleton<IAppSettings, AppSettings>();
-
-            //var appSettingsSection = Configuration.GetSection("AppSettings");
-            //services.Configure<AppSettings>(appSettingsSection);
-
-            //services.Configure<WebApiOptions>(Configuration.GetSection("WebApi"));
+            // App settings
+            services.AddSingleton(serviceProvider =>
+            {
+                var userOptions = new UserOptions(serviceProvider.GetService<IHttpContextAccessor>());
+                Configuration.GetSection("User").Bind(userOptions);
+                return userOptions;
+            });
+            services.AddSingleton(Configuration.GetSection("WebApi").Get<WebApiOptions>());
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICompanyService, CompanyService>();
@@ -68,8 +71,7 @@ namespace VisitorRegistration_ASP
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IAppSettings appSettings, ILogger<Startup> logger)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger, WebApiOptions webApiOptions)
         {
             if (env.IsDevelopment())
             {
@@ -116,10 +118,10 @@ namespace VisitorRegistration_ASP
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            if (!string.IsNullOrEmpty(appSettings.BaseApiPath))
+            if (!string.IsNullOrEmpty(webApiOptions.BasePath))
             {
                 // Web API warm up
-                var httpClient = new HttpClient { BaseAddress = new Uri(appSettings.BaseApiPath) };
+                var httpClient = new HttpClient { BaseAddress = new Uri(webApiOptions.BasePath) };
                 httpClient.GetAsync("Company");
             }
             else

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using VisitorRegistration_ASP.Controllers;
 using VisitorRegistration_ASP.Helpers;
+using VisitorRegistration_ASP.Options;
 using VisitorRegistration_BLL.Services;
 using VisitorRegistration_Models;
 
@@ -18,13 +19,13 @@ namespace VisitorRegistration_ASP.Areas.Manage.Controllers
 
     public class CompaniesController : BaseController
     {
-        private readonly IAppSettings _appSettings;
         private readonly ICompanyService _service;
+        private readonly UserOptions _userOptions;
 
-        public CompaniesController(IAppSettings appSettings, ICompanyService service)
+        public CompaniesController(ICompanyService service, UserOptions userOptions)
         {
-            _appSettings = appSettings;
             _service = service;
+            _userOptions = userOptions;
         }
 
         private BreadcrumbNode BuildRootBreadcrumbNode()
@@ -37,7 +38,7 @@ namespace VisitorRegistration_ASP.Areas.Manage.Controllers
 
         private void UpdateReturnUrl()
         {
-            ReturnUrl = Request.GetTypedHeaders().Referer.ToString();
+            ReturnUrl = GetRefererUrl();
         }
 
         private IActionResult HandleReturn()
@@ -51,11 +52,11 @@ namespace VisitorRegistration_ASP.Areas.Manage.Controllers
         [Breadcrumb("Companies", AreaName = "Manage", FromAction = "Index", FromController = typeof(HomeController))]
         public async Task<IActionResult> Index(int page = 1, int? pageSize = null)
         {
-            int size = pageSize ?? _appSettings.PageSize;
+            int size = pageSize ?? _userOptions.PageSize;
 
             if (pageSize != null)
             {
-                _appSettings.PageSize = size;
+                _userOptions.PageSize = size;
             }
 
             var companies = await _service.GetAllCompaniesPaged(page, size);

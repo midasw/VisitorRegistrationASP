@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisitorRegistration_ASP", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisitorRegistration_BLL", "VisitorRegistration_BL\VisitorRegistration_BLL.csproj", "{E4755C74-C386-4F61-BA63-36C1040D85D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisitorRegistration_API", "VisitorRegistration_API\VisitorRegistration_API.csproj", "{1A3F9920-3FA1-4B81-A73E-DD0A54516B17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisitorRegistration_API", "VisitorRegistration_API\VisitorRegistration_API.csproj", "{1A3F9920-3FA1-4B81-A73E-DD0A54516B17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

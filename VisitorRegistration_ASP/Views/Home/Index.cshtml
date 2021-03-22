@@ -33,14 +33,14 @@
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="CompanyId">Select the company which you have an appointment with:</label>
+                    <label asp-for="CompanyId"></label>
                     <select asp-for="CompanyId" asp-items="@Model.Companies" class="form-control" id="js-companies-dropdown">
                         <option disabled selected>- Please select -</option>
                     </select>
                     <span asp-validation-for="CompanyId" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="EmployeeId">Select the employee who you have an appointment with:</label>
+                    <label asp-for="EmployeeId"></label>
                     <select asp-for="EmployeeId" asp-items="@Model.Employees" class="form-control" id="js-employees-dropdown" disabled>
                         <option disabled selected>- Please select -</option>
                     </select>

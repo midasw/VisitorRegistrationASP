@@ -16,14 +16,14 @@ namespace VisitorRegistration_DAL.Repository
 
         public override IQueryable<Company> GetAll()
         {
-            return _context.Companies
+            return _entities
                 .Include(c => c.Employees)
                 .OrderByDescending(c => c.Id);
         }
 
         public override async Task<Company> GetById(int id)
         {
-            Company company = await _context.Companies
+            Company company = await _entities
                 .Include(c => c.Employees)
                 .FirstOrDefaultAsync(c => c.Id == id);
 

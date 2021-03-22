@@ -1,11 +1,13 @@
 ﻿@model IEnumerable<VisitorRegistration_Models.Company>
 
+@using Microsoft.Extensions.Localization
 @using VisitorRegistration_ASP.Models;
 @using X.PagedList;
 
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+
 @{
-    ViewData["Title"] = "Manage companies";
-    Layout = "../Shared/_Layout.cshtml";
+    ViewData["Title"] = SharedLocalizer["Manage companies"];
 }
 
 <div class="container">

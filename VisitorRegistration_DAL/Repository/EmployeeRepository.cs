@@ -16,7 +16,7 @@ namespace VisitorRegistration_DAL.Repository
 
         public new IEnumerable<Employee> GetAll()
         {
-            return _context.Employees
+            return _entities
                 .OrderBy(e => e.LastName)
                 .OrderBy(e => e.FirstName)
                 .ToList();
@@ -24,7 +24,7 @@ namespace VisitorRegistration_DAL.Repository
 
         public override async Task<Employee> GetById(int id)
         {
-            return await _context.Employees
+            return await _entities
                 .Include(e => e.Company)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }

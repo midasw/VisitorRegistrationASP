@@ -28,7 +28,7 @@ namespace VisitorRegistration_ASP.Areas.Manage.Controllers
             _userOptions = userOptions;
         }
 
-        private BreadcrumbNode BuildRootBreadcrumbNode()
+        private static BreadcrumbNode BuildRootBreadcrumbNode()
         {
             return new MvcBreadcrumbNode("Index", "Companies", "Companies", false, null, "Manage")
             {
@@ -60,6 +60,8 @@ namespace VisitorRegistration_ASP.Areas.Manage.Controllers
             }
 
             var companies = await _service.GetAllCompaniesPaged(page, size);
+
+            companies = await _service.GetAllCompaniesPaged(pageSize: 10);
 
             if (companies.PageCount > 0 && page > companies.PageCount)
             {

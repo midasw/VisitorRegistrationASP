@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,46 +9,46 @@ namespace VisitorRegistration_DAL.Repository
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
-        protected readonly ApplicationDbContext _context;
+        protected readonly DbSet<TEntity> _entities;
 
         public GenericRepository(ApplicationDbContext context)
         {
-            _context = context;
+            _entities = context.Set<TEntity>();
         }
 
         public TEntity Add(TEntity entity)
         {
-            return _context.Set<TEntity>().Add(entity).Entity;
+            return _entities.Add(entity).Entity;
         }
 
         public virtual IQueryable<TEntity> GetAll()
         {
-            return _context.Set<TEntity>();
+            return _entities;
         }
 
         public virtual async Task<TEntity> GetById(int id)
         {
-            return await _context.Set<TEntity>().FindAsync(id);
+            return await _entities.FindAsync(id);
         }
 
         public void Create(TEntity entity)
         {
-            _context.Set<TEntity>().Add(entity);
+            _entities.Add(entity);
         }
 
         public void Update(TEntity entity)
         {
-            _context.Set<TEntity>().Update(entity);
+            _entities.Update(entity);
         }
 
         public void Delete(TEntity entity)
         {
-            _context.Set<TEntity>().Remove(entity);
+            _entities.Remove(entity);
         }
 
         public void DeleteRange(IEnumerable<TEntity> entities)
         {
-            _context.Set<TEntity>().RemoveRange(entities);
+            _entities.RemoveRange(entities);
         }
     }
 }

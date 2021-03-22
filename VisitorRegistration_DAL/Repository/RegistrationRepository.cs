@@ -16,14 +16,14 @@ namespace VisitorRegistration_DAL.Repository
 
         public async Task<ICollection<Registration>> GetByEmail(string email)
         {
-            return await _context.Registrations
+            return await _entities
                 .Where(r => r.Email == email && r.EndDate == null)
                 .ToListAsync();
         }
 
         public IQueryable<Registration> GetActiveRegistrations()
         {
-            return _context.Registrations
+            return _entities
                 .Include(r => r.Employee)
                 .ThenInclude(e => e.Company)
                 .Where(r => r.EndDate == null)

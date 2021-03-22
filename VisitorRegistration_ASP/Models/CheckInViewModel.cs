@@ -2,31 +2,31 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+
+using Resource = VisitorRegistration_ASP.Resources.Models.CheckInViewModel;
 
 namespace VisitorRegistration_ASP.Models
 {
     public class CheckInViewModel
     {
         [Required]
-        [Display(Name = "First name")]
+        [Display(Name = nameof(Resource.FirstName), ResourceType = typeof(Resource))]
         public string FirstName { get; set; }
 
         [Required]
-        [Display(Name = "Last name")]
+        [Display(Name = nameof(Resource.LastName), ResourceType = typeof(Resource))]
         public string LastName { get; set; }
 
         [Required]
-        [Display(Name = "Email address")]
+        [Display(Name = nameof(Resource.Email), ResourceType = typeof(Resource))]
         public string Email { get; set; }
 
-        [Required]
-        [Display(Name = "Company")]
+        [Required(ErrorMessageResourceName = nameof(Resource.VisitingCompanyRequired), ErrorMessageResourceType = typeof(Resource))]
+        [Display(Name = nameof(Resource.VisitingCompany), ResourceType = typeof(Resource))]
         public int? CompanyId { get; set; }
 
-        [Required]
-        [Display(Name = "Employee")]
+        [Required(ErrorMessageResourceName = nameof(Resource.AppointmentWithRequired), ErrorMessageResourceType = typeof(Resource))]
+        [Display(Name = nameof(Resource.AppointmentWith), ResourceType = typeof(Resource))]
         public int? EmployeeId { get; set; }
 
         public SelectList Companies { get; set; }

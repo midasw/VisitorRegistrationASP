@@ -1,6 +1,4 @@
-﻿/// <binding ProjectOpened='watchSass' />
-
-const gulp = require('gulp');
+﻿const gulp = require('gulp');
 //const gulpif = require('gulpif');
 const { series } = require('gulp');
 
@@ -8,14 +6,10 @@ const rename = require('gulp-rename');
 const lec = require('gulp-line-ending-corrector');
 const sass = require('gulp-sass');
 const minifyCSS = require('gulp-minify-css');
-//const browserSync = require('browser-sync').create();
-
-
 
 var minimist = require('minimist');
 var log = require('fancy-log');
 var es = require('event-stream');
-
 
 var knownOptions = {
     string: 'files',
@@ -24,17 +18,24 @@ var knownOptions = {
 
 var options = minimist(process.argv.slice(2), knownOptions);
 
-gulp.task('sass-compile', function (done) {
+gulp.task('sass-compile', function () {
     var files = options.files.split(";");
     log(files);
-    files.forEach(function (file) {
-        gulp.src(file)
-            .pipe(sass().on('error', sass.logError))
-            .pipe(lec())
-            .pipe(rename({ dirname: '' }))
-            .pipe(gulp.dest(options.outdir))
-    });
-    done();
+    return gulp.src(files)
+        .pipe(sass().on('error', sass.logError))
+        .pipe(lec())
+        .pipe(rename({ dirname: '' }))
+        .pipe(gulp.dest(options.outdir));
+});
+
+gulp.task('css-minify', function () {
+    var files = options.files.split(";");
+    log(files);
+    return gulp.src(files)
+        .pipe(minifyCSS())
+        .pipe(lec())
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(gulp.dest('.'));
 });
 
 
@@ -59,12 +60,6 @@ function watchSass() {
     gulp.watch('Content/*.scss', compileSass);
 }
 
-function copyLibs() {
+gulp.task('copy-libs', function () {
     return gulp.src(['node_modules/bootstrap-icons/font/fonts/**/*']).pipe(gulp.dest('wwwroot/css/fonts'));
-}
-
-exports.minify = minify;
-exports.copyLibs = copyLibs;
-exports.compileSass = compileSass;
-exports.watchSass = watchSass;
-exports.default = series(compileSass);
+});

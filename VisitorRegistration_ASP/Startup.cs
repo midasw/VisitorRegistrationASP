@@ -2,7 +2,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,10 +15,13 @@ using Microsoft.Extensions.Options;
 using SmartBreadcrumbs.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using VisitorRegistration_ASP.Helpers;
 using VisitorRegistration_ASP.Options;
+using VisitorRegistration_ASP.Resources;
 using VisitorRegistration_BLL.Services;
 using VisitorRegistration_DAL;
 using VisitorRegistration_DAL.UnitOfWork;
@@ -68,7 +74,31 @@ namespace VisitorRegistration_ASP
                 options.OlClasses = "breadcrumb";
                 options.LiClasses = "breadcrumb-item";
                 options.ActiveLiClasses = "breadcrumb-item active";
+                options.ResourceType = typeof(BreadcrumbResources);
             });
+
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+            services.AddMvc()
+                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+                .AddDataAnnotationsLocalization();
+
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new List<CultureInfo>
+                {
+                    new CultureInfo("en"),
+                    new CultureInfo("nl-BE")
+                };
+
+                options.DefaultRequestCulture = new RequestCulture("en");
+                // Formatting numbers, dates, etc.
+                options.SupportedCultures = supportedCultures;
+                // UI strings that we have localized.
+                options.SupportedUICultures = supportedCultures;
+            });
+
+            services.AddSingleton<IValidationAttributeAdapterProvider, CustomValidationAttributeAdapterProvider>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger, WebApiOptions webApiOptions)
@@ -101,6 +131,9 @@ namespace VisitorRegistration_ASP
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            var options = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
+            app.UseRequestLocalization(options.Value);
 
             app.UseRouting();
 

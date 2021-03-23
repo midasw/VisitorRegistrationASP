@@ -62,8 +62,6 @@ namespace VisitorRegistration.MVC.Areas.Manage.Controllers
 
             var companies = await _service.GetAllCompaniesPaged(page, size);
 
-            companies = await _service.GetAllCompaniesPaged(pageSize: 10);
-
             if (companies.PageCount > 0 && page > companies.PageCount)
             {
                 return RedirectToAction(nameof(Index), HttpContext.GetQueryParameters().WithRoute("page", companies.PageCount));

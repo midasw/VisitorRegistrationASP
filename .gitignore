@@ -2,7 +2,9 @@ bin
 obj
 .vs
 Thumbs.db
+node_modules
 **/bin
 **/obj
 **/.vs
 **/Thumbs.db
+**/node_modules
